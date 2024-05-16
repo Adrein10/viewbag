@@ -1,4 +1,4 @@
-﻿@model viewbag.Models.User
+﻿@model viewbag.Models.CustormUser
 
 @{
     ViewData["Title"] = "signup";
@@ -13,26 +13,31 @@
         <form asp-action="signup">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+                <label asp-for="CUser.Name" class="control-label"></label>
+                <input asp-for="CUser.Name" class="form-control" />
+                <span asp-validation-for="CUser.Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" />
-                <span asp-validation-for="Email" class="text-danger"></span>
+                <label asp-for="CUser.Email" class="control-label"></label>
+                <input asp-for="CUser.Email" class="form-control" />
+                <span asp-validation-for="CUser.Email" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="Password" class="control-label"></label>
-                <input asp-for="Password" class="form-control" />
-                <span asp-validation-for="Password" class="text-danger"></span>
+                <label asp-for="CUser.Password" class="control-label"></label>
+                <input asp-for="CUser.Password" class="form-control" />
+                <span asp-validation-for="CUser.Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="RoleId" class="control-label"></label>
-                <select asp-for="RoleId" class ="form-control" asp-items="ViewBag.RoleId"></select>
+                <label asp-for="CUser.RoleId" class="control-label"></label>
+                <select asp-for="CUser.RoleId" class ="form-control" asp-items="ViewBag.RoleId">
+                    @foreach(var item in Model.CRole)
+                    {
+                        <option value="@item.RoleId">@item.RoleName</option>
+                    }
+                </select>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Signup" class="btn btn-primary" />
             </div>
         </form>
     </div>

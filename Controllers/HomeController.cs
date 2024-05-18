@@ -16,15 +16,25 @@ namespace viewbag.Controllers
 			this.accessor = accessor;
 			this.context = context;
         }
-
         public IActionResult Index()
         {
-            
-            var data = "lorem ainj kmuin riok kulh njkg uiou kjkh";
-            ViewBag.lorem = data;
-            ViewBag.heading = "Welcome";
-            string[] arr = { "name1", "name2", "name3"};
-            ViewBag.array = arr;
+            if(accessor.HttpContext.Session.GetString("sessionName") != null)
+            {
+                ViewBag.sessionName = accessor.HttpContext.Session.GetString("SessionName").ToString();
+                if (accessor.HttpContext.Session.GetString("SessionRole") == "Customer")
+                {
+                    
+                    return View();
+                }
+                else if (accessor.HttpContext.Session.GetString("SessionRole") == "Admin")
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return View("Login");
+            }
             return View();
         }
         public IActionResult signup()
@@ -58,14 +68,39 @@ namespace viewbag.Controllers
         public IActionResult login(User user)
         {
             var show = context.Users.Where(option => option.Email == user.Email && option.Password == user.Password).FirstOrDefault();
-            if(show != null)
-            {
-                accessor.HttpContext.Session.SetString("session", show.Name);
-                return RedirectToAction("Index");
-            }else
-            {
-                ViewBag.failed = "Login Failed";
+
+            if (show!=null){
+
+                var userRole = context.Roles.FirstOrDefault(options=>options.RoleId == show.RoleId);
+                accessor.HttpContext.Session.SetString("sessionName", show.Name);
+                accessor.HttpContext.Session.SetString("sessionEmail", show.Email);
+                accessor.HttpContext.Session.SetString("sessionPass", show.Password);
+                accessor.HttpContext.Session.SetString("sessionRole", userRole.RoleName);
+                if (userRole.RoleName == "Customer")
+                {
+                    return RedirectToAction("Index");
+                }else if (userRole.RoleName == "Admin")
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+
+
+               
+
+
+
+
             }
+            
+            
+            
+            
+
+
+
+
+
+
             return View();
         }
         public IActionResult Privacy()

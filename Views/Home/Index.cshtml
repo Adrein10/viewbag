@@ -1,14 +1,7 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
-    var list = ViewBag.array as string[];
+    
 }
 <div class="text-success">
-    <h3>@ViewBag.lorem</h3>
-    <h3>@ViewBag.heading</h3>
-    @foreach(var item in list)
-    {
-        <h4>
-            @item
-        </h4>
-    }
+    <h1>@ViewBag.sessionName</h1>
 </div>

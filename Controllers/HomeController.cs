@@ -18,12 +18,14 @@ namespace viewbag.Controllers
         }
         public IActionResult Index()
         {
-            if(accessor.HttpContext.Session.GetString("sessionName") != null)
+
+            var asd = accessor.HttpContext.Session.GetString("sessionName");
+            if (accessor.HttpContext.Session.GetString("sessionName") != null)
             {
-                ViewBag.sessionName = accessor.HttpContext.Session.GetString("SessionName").ToString();
+                ViewBag.sessionName = asd;
                 if (accessor.HttpContext.Session.GetString("SessionRole") == "Customer")
                 {
-                    
+
                     return View();
                 }
                 else if (accessor.HttpContext.Session.GetString("SessionRole") == "Admin")
@@ -69,42 +71,62 @@ namespace viewbag.Controllers
         {
             var show = context.Users.Where(option => option.Email == user.Email && option.Password == user.Password).FirstOrDefault();
 
-            if (show!=null){
+            if (show != null)
+            {
 
-                var userRole = context.Roles.FirstOrDefault(options=>options.RoleId == show.RoleId);
+                var userRole = context.Roles.FirstOrDefault(options => options.RoleId == show.RoleId);
                 accessor.HttpContext.Session.SetString("sessionName", show.Name);
                 accessor.HttpContext.Session.SetString("sessionEmail", show.Email);
-                accessor.HttpContext.Session.SetString("sessionPass", show.Password);
                 accessor.HttpContext.Session.SetString("sessionRole", userRole.RoleName);
                 if (userRole.RoleName == "Customer")
                 {
                     return RedirectToAction("Index");
-                }else if (userRole.RoleName == "Admin")
+                }
+                else if (userRole.RoleName == "Admin")
                 {
                     return RedirectToAction("Index", "Admin");
                 }
-
-
-               
-
-
-
-
             }
-            
-            
-            
-            
-
-
-
-
-
-
+            else
+            {
+                return RedirectToAction("login");
+            }
             return View();
         }
         public IActionResult Privacy()
         {
+            var asd = accessor.HttpContext.Session.GetString("sessionName");
+            if (accessor.HttpContext.Session.GetString("sessionName") != null)
+            {
+
+
+
+
+                ViewBag.sessionName = asd;
+                if (accessor.HttpContext.Session.GetString("SessionRole") == "Customer")
+                {
+
+                    return View();
+                }
+                else if (accessor.HttpContext.Session.GetString("SessionRole") == "Admin")
+                {
+                    return RedirectToAction("Index", "Admin");
+                }
+            }
+            else
+            {
+                return View("Login");
+            }
+            return View();
+           
+        }
+        public IActionResult logout()
+        {
+            if(accessor.HttpContext.Session.GetString("sessionName") != null)
+            {
+                accessor.HttpContext.Session.Clear();
+                return RedirectToAction("login");
+            }
             return View();
         }
 

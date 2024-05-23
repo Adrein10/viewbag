@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿@inject Microsoft.AspNetCore.Http.IHttpContextAccessor accessor;
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -28,6 +29,10 @@
                     </ul>
                 </div>
             </div>
+            @if (accessor.HttpContext.Session.GetString("sessionName") != null)
+            {
+                <a asp-controller="home" asp-action="logout" class="btn btn-danger">Logout</a>
+            }
         </nav>
     </header>
     <div class="container">

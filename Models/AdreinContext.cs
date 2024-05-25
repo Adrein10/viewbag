@@ -16,6 +16,7 @@ namespace viewbag.Models
         {
         }
 
+        public virtual DbSet<Product> Products { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
 
@@ -29,6 +30,30 @@ namespace viewbag.Models
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Product>(entity =>
+            {
+                entity.ToTable("Product");
+
+                entity.Property(e => e.Id).HasColumnName("id");
+
+                entity.Property(e => e.Discription)
+                    .IsUnicode(false)
+                    .HasColumnName("discription");
+
+                entity.Property(e => e.Image)
+                    .IsUnicode(false)
+                    .HasColumnName("image");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .IsUnicode(false)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Price).HasColumnName("price");
+
+                entity.Property(e => e.Quantity).HasColumnName("quantity");
+            });
+
             modelBuilder.Entity<Role>(entity =>
             {
                 entity.ToTable("Role");

@@ -39,6 +39,23 @@ namespace viewbag.Controllers
             }
             return View();
         }
+        public IActionResult product()
+        {
+            return View();
+        }
+        [HttpPost]
+        public IActionResult product(Product product,IFormFile img)
+        {
+            var check = product;
+            var check2 = img;
+            var check3 = "sds";
+            return View();
+        }
+        public IActionResult productlist()
+        {
+            var show = context.Products.ToList();
+            return View(show);
+        }
         public IActionResult signup()
         {
             CustormUser newdata = new CustormUser()
@@ -89,7 +106,7 @@ namespace viewbag.Controllers
             }
             else
             {
-                return RedirectToAction("login");
+                ViewBag.failed = "Login Failed";
             }
             return View();
         }

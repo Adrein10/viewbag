@@ -46,15 +46,111 @@ namespace viewbag.Controllers
         [HttpPost]
         public IActionResult product(Product product,IFormFile img)
         {
-            var check = product;
-            var check2 = img;
-            var check3 = "sds";
+           if(img != null && img.Length > 1)
+            {
+                var filetype = System.IO.Path.GetExtension(img.FileName).Substring(1);
+
+                if (filetype == "png" || filetype == "jpeg")
+                {
+                    var realname = Path.GetFileName(img.FileName);
+
+                    var name = Guid.NewGuid() + realname;
+
+                    var folder = Path.Combine(HttpContext.Request.PathBase.Value, "wwwroot/images");
+
+                    if (!Directory.Exists(folder))
+                    {
+                        Directory.CreateDirectory(folder);
+                    }
+
+                    var path = Path.Combine(folder, name);
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        img.CopyTo(stream);
+                    }
+
+                    var dbPath = Path.Combine("images", name);
+
+                    Product data = new Product()
+                    {
+                        Name = product.Name,
+                        Price = product.Price,
+                        Quantity = product.Quantity,
+                        Discription = product.Discription,
+                        Image = dbPath
+                    };
+                    context.Products.Add(data);
+                    context.SaveChanges();
+                    return RedirectToAction("productlist");
+                }
+                else
+                {
+                    ViewBag.failedfile = "File type is not supported";
+                }
+            }
+
+            
             return View();
         }
         public IActionResult productlist()
         {
             var show = context.Products.ToList();
             return View(show);
+        }
+        public IActionResult productedit(int id)
+        {
+            var show = context.Products.Find(id);
+            return View(show);
+        }
+        [HttpPost]
+        public IActionResult productedit(int id,Product product,IFormFile img)
+        {
+            var finduser = context.Products.FirstOrDefault(options => options.Id == id);
+            //if (img != null && img.Length > 1)
+            //{
+            //    var filetype = System.IO.Path.GetExtension(img.FileName).Substring(1);
+
+            //    if (filetype == "png" || filetype == "jpeg" || filetype == "jfif")
+            //    {
+            //        var realname = Path.GetFileName(img.FileName);
+
+            //        var name = Guid.NewGuid() + realname;
+
+            //        var folder = Path.Combine(HttpContext.Request.PathBase.Value, "wwwroot/images");
+
+            //        if (!Directory.Exists(folder))
+            //        {
+            //            Directory.CreateDirectory(folder);
+            //        }
+
+            //        var path = Path.Combine(folder, name);
+
+            //        using (var stream = new FileStream(path, FileMode.Create))
+            //        {
+            //            img.CopyTo(stream);
+            //        }
+
+            //        var dbPath = Path.Combine("images", name);
+
+            //        Product data = new Product()
+            //        {
+            //            Name = product.Name,
+            //            Price = product.Price,
+            //            Quantity = product.Quantity,
+            //            Discription = product.Discription,
+            //            Image = dbPath
+            //        };
+            //        context.Products.Update(data);
+            //        context.SaveChanges();
+            //        return RedirectToAction("productlist");
+            //    }
+            //    else
+            //    {
+            //        ViewBag.failedfile = "File type is not supported";
+            //    }
+            //}
+            return View();
         }
         public IActionResult signup()
         {

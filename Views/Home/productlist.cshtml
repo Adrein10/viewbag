@@ -39,15 +39,15 @@
                 @Html.DisplayFor(modelItem => item.Quantity)
             </td>
             <td>
-                    <img src="~/@Html.DisplayFor(modelItem => item.Image)" width="100px" height="100px" />
+                <img src="~/@Html.DisplayFor(modelItem => item.Image)" width="100px" height="100px" />
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                <a asp-action="productedit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                <a class="btn btn-info" asp-action="productedit" asp-route-id="@item.Id">Edit</a> |
+                <a class="btn btn-success" asp-action="productdetails" asp-route-id="@item.Id">Details</a> |
+                <a class="btn btn-danger" asp-action="deleteproduct" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }
